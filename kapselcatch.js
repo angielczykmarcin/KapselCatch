@@ -1,3 +1,5 @@
+import { playSound, playBackgroundMusic, speedUpBackgroundMusic } from '/AudioHandler.js';
+
 let inSlowEffect = false;
 let preSlowLevelSpeed;
 let preSlowCirclesCaptured;
@@ -414,15 +416,15 @@ function handleTrapClick(element)
     let rand = Math.random();
     if(rand < 0.33)
     {
-        playSound(trapClickedSound);
+        playSound('trapClickedSound');
     }
     else if (rand > 0.32 && rand < 0.66)
     {
-        playSound(trapClicked2Sound);
+        playSound('trapClicked2Sound');
     }
     else
     {
-        playSound(trapClicked3Sound);
+        playSound('trapClicked3Sound');
     }
     
     
@@ -506,7 +508,7 @@ function spawnBonusCircle()
     divEleement.style.left = `${Math.random() * (window.innerWidth - 500)}px`;
     divEleement.onclick = () => handleBonusCircleClick(divEleement, bonusNo, bonusType);
     mainContainer.append(divEleement);
-    playSound(bonusCircleSound);
+    playSound('bonusCircleSound');
     setTimeout(() => {
         despawnCircle(divEleement, 'bonus');
     },2000)
@@ -530,7 +532,7 @@ function handleCircleClick(element)
     
 
     increaseScore(element);
-    playSound(kapselCapturedSound);
+    playSound('kapselCapturedSound');
 }
 
 function handleBonusCircleClick(element, bonusNo, bonusType)
@@ -556,7 +558,7 @@ function slowDownGame()
     inSlowEffect = true
     music.pause();
     gameSlowed = true;
-    playSound(slowedDownBackground);
+    playSound('slowedDownBackground');
     setTimeout(() => {
         gameSlowed = false;
         inSlowEffect = false;
@@ -630,7 +632,7 @@ function increaseScoreBonus()
     let scoreCounter = document.querySelector(".score");
     scoreCounter.innerHTML = 'Score: ' + parseInt(score);
     circleCount--;
-    playSound(bonusPointsSound);
+    playSound('bonusPointsSound');
 }
 
 function youLost(interval)
@@ -647,14 +649,14 @@ function youLost(interval)
     youLostElement.innerHTML = 'Kapsel escaped!!';
     mainContainer.append(youLostElement);
     clearInterval(interval);
-    playSound(youLostSound);
+    playSound('youLostSound');
     if(score > 50)
     {
-        playSound(impressiveSound);
+        playSound('impressiveSound');
     }
     else
     {
-        playSound(notImpressiveSound);
+        playSound('notImpressiveSound');
     }
 
     setTimeout(() => {
@@ -791,19 +793,5 @@ function fetchScores()
     }
     return result;
 }
-let playBackgroundMusic = () => 
-{
-    music.loop = true;
-    music.play();
-}
 
-let speedUpBackgroundMusic = () =>{
-    music.playbackRate += 0.25;
-}
-
-function playSound(sound)
-{
-    sound.currentTime = 0;
-    sound.play();
-}
 
