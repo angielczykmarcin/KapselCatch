@@ -1,34 +1,19 @@
-import { playSound, playBackgroundMusic, speedUpBackgroundMusic } from '/AudioHandler.js';
+import { playSound, playBackgroundMusic, speedUpBackgroundMusic, pauseSound } from '/AudioHandler.js';
 
 let inSlowEffect = false;
 let preSlowLevelSpeed;
 let preSlowCirclesCaptured;
 let multiplier = 1;
-let alive = true;
 let gameLost = false;
 let levelRunning = false;
 let score = 0;
 let circlesCaptured = 0;
-let circleCount = 0;
 let interval;
 let gameInterval;
 let missed = 0;
 let gameSlowed = false;
 let streakSize = 0;
 let currentLevelSpeed = 750;
-let music = new Audio("imgs/game/backgroundMusic.mp3");
-let kapselCapturedSound = new Audio("imgs/game/kapselBark.mp3");
-let youLostSound = new Audio("imgs/game/youLost.mp3");
-let bonusCircleSound = new Audio("imgs/game/meow.mp3");
-let bonusPointsSound =  new Audio("imgs/game/bonuspoints.mp3");
-let impressiveSound =  new Audio("imgs/game/impressive.mp3");
-let trapClickedSound = new Audio("imgs/game/trapclicked.mp3");
-let trapClicked2Sound = new Audio("imgs/game/trapclicked2.mp3");
-let trapClicked3Sound = new Audio("imgs/game/trapclicked3.mp3");
-let notImpressiveSound = new Audio("imgs/game/notimpressive.mp3");
-let powerUpMultiplier = new Audio("imgs/game/powerupmultiplier.mp3");
-let powerUpSlow = new Audio("imgs/game/powerupslow.mp3");
-let slowedDownBackground = new Audio("imgs/game/powerupslow.mp3");
 
 window.onload = (event) => {
     let bodyElement = document.querySelector("body");
@@ -521,7 +506,6 @@ function getRandomNumberRange(min, max)
 
 function handleCircleClick(element)
 {
-    //spawnExplosion(element);
     streakSize += 1;
     element.classList.remove("roll-in-left");
     element.classList.remove("roll-in-right");
@@ -556,14 +540,14 @@ function handleBonusCircleClick(element, bonusNo, bonusType)
 function slowDownGame()
 {
     inSlowEffect = true
-    music.pause();
+    pauseSound('music');
     gameSlowed = true;
     playSound('slowedDownBackground');
     setTimeout(() => {
         gameSlowed = false;
         inSlowEffect = false;
-        music.play();
-        slowedDownBackground.pause();
+        playSound('music');
+        pauseSound('slowedDownBackground');
     }, 10000);
 }
 
@@ -685,7 +669,6 @@ function showHighScores()
    let mainContainer = document.querySelector(".game-container");
    let highScoresElement = document.createElement("div");
    highScoresElement.classList.add("high-scores");
-   //highScoresElement.innerHTML = htmlifyScores(result);
    mainContainer.append(highScoresElement);
    
    let header = document.createElement("div");

@@ -1,4 +1,4 @@
-export { playSound, playBackgroundMusic, speedUpBackgroundMusic };
+export { playSound, playBackgroundMusic, speedUpBackgroundMusic, pauseSound };
 
 const audio = {
     music: new Audio("imgs/game/backgroundMusic.mp3"),
@@ -29,4 +29,8 @@ function playBackgroundMusic() {
 
 function speedUpBackgroundMusic(){
     audio['music'].playbackRate += 0.25;
+}
+
+function pauseSound(sound){
+    audio[sound].pause();
 }
