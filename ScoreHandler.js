@@ -1,4 +1,4 @@
-export { decreaseScore, increaseScore, increaseScoreBonus, circleCount, score, circlesCaptured, multiplier, increaseCircleCount, increaseMissed, streakSize, missed };
+export { decreaseScore, increaseScore, increaseScoreBonus, circleCount, score, circlesCaptured, multiplier, increaseCircleCount, increaseMissed, streakSize, missed, increaseStreakSize, increaseMultiplier, handleStreakBonus };
 import { playSound } from '/AudioHandler.js';
 import { spawnClickResult } from '/SpawnHandler.js';
 
@@ -46,4 +46,67 @@ function increaseMissed()
     missed++;
     let missedCounter = document.querySelector(".missed");
     missedCounter.innerHTML = "Missed: " + missed;
+}
+
+function increaseStreakSize(){
+    streakSize += 1;
+}
+
+function increaseMultiplier()
+{
+    multiplier += 1;
+    let gameContainer = document.querySelector(".header-container");
+    let multiplierElement = document.querySelector(".multiplier");
+    multiplierElement.remove();
+    let newMultiplierElement = document.createElement("div");
+    newMultiplierElement.innerHTML = 'X' + multiplier;
+    if(multiplier > 1)
+    {
+        newMultiplierElement.style.color = "green";   
+    }
+    if(multiplier > 2)
+    {
+        newMultiplierElement.style.color = "blue";   
+    }
+    if(multiplier > 3)
+    {
+        newMultiplierElement.style.color = "red";   
+    }
+    newMultiplierElement.classList.add("multiplier");
+    newMultiplierElement.classList.add("flip-scale-up-hor");
+    gameContainer.append(newMultiplierElement);
+    setTimeout(() => {
+        multiplier--;
+        let headerContainer = document.querySelector(".header-container");
+        let multiplierElement = document.querySelector(".multiplier");
+        multiplierElement.remove();
+        let newMultiplierElement = document.createElement("div");
+        newMultiplierElement.innerHTML = 'X' + multiplier;
+        if(multiplier > 1)
+        {
+            newMultiplierElement.style.color = "green";   
+        }
+        if(multiplier > 2)
+        {
+            newMultiplierElement.style.color = "blue";   
+        }
+        if(multiplier > 3)
+        {
+            newMultiplierElement.style.color = "red";   
+        }
+        newMultiplierElement.classList.add("flip-scale-up-hor");
+        newMultiplierElement.classList.add("multiplier");
+        headerContainer.append(newMultiplierElement);
+    }, 10000);
+}
+
+function handleStreakBonus()
+{
+    setInterval(() => {
+        if(streakSize > 30)
+        {
+            streakSize = 0;
+            increaseMultiplier();
+        }
+    }, 250);
 }
