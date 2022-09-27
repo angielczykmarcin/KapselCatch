@@ -1,18 +1,22 @@
 import { playSound, playBackgroundMusic, speedUpBackgroundMusic, pauseSound } from '/AudioHandler.js';
+import { decreaseScore, score, circlesCaptured, multiplier, increaseScore, increaseScoreBonus, circleCount, increaseCircleCount, increaseMissed, streakSize, missed } from '/ScoreHandler.js';
+import { spawnClickResult } from '/SpawnHandler.js';
 
 let inSlowEffect = false;
 let preSlowLevelSpeed;
 let preSlowCirclesCaptured;
-let multiplier = 1;
+//let multiplier = 1;
 let gameLost = false;
 let levelRunning = false;
-let score = 0;
-let circlesCaptured = 0;
+//let score = 0;
+let alive = true;
+//let circleCount = 0;
+//let circlesCaptured = 0;
 let interval;
 let gameInterval;
-let missed = 0;
+//let missed = 0;
 let gameSlowed = false;
-let streakSize = 0;
+//let streakSize = 0;
 let currentLevelSpeed = 750;
 
 window.onload = (event) => {
@@ -97,7 +101,6 @@ function despawnElementByClassName(elementClasses)
 {
     elementClasses.forEach((elementClass) =>{
         let foundElement = document.querySelector(elementClass);
-        console.log(foundElement);
         foundElement.remove();
     })
 }
@@ -235,7 +238,7 @@ function startGame(levelSpeed, scoreBreakpoint)
 function startLevel(delay)
 {
     interval = setInterval(() => {
-        circleCount++;
+        increaseCircleCount();
         if(missed < 5)
         {
             spawnCircle();
@@ -246,120 +249,6 @@ function startLevel(delay)
             alive = false;
         }
     },delay)
-}
-
-function spawnExplosion(clickedElement)
-{
-    let gameContainer = document.querySelector(".game-container");
-    let explosionElements = [];
-    for(let i = 0; i <200; i ++)
-    {
-        let explosionElement = document.createElement("div");
-        let leftOffset = Math.random() * 105;
-        let topOffset = Math.random() * 105;
-        explosionElement.classList.add("explosion-element");
-        if(i < 25)
-        {
-            explosionElement.style.left = `${clickedElement.offsetLeft + leftOffset}px`;
-            explosionElement.style.top = `${clickedElement.offsetTop + topOffset}px`;
-            explosionElement.classList.add("explosion-element-dr")
-        }
-        if(i > 24 && i < 50)
-        {
-            explosionElement.style.left = `${clickedElement.offsetLeft + leftOffset}px`;
-            explosionElement.style.top = `${clickedElement.offsetTop - topOffset}px`;
-            explosionElement.classList.add("explosion-element-ur")
-        }
-        if(i > 49 && i < 75)
-        {
-            explosionElement.style.left = `${clickedElement.offsetLeft - leftOffset}px`;
-            explosionElement.style.top = `${clickedElement.offsetTop + topOffset}px`;
-            explosionElement.classList.add("explosion-element-dl")
-        }
-        if(i > 74 && i < 100)
-        {
-            explosionElement.style.left = `${clickedElement.offsetLeft - leftOffset}px`;
-            explosionElement.style.top = `${clickedElement.offsetTop - topOffset}px`;
-            explosionElement.classList.add("explosion-element-ul")
-        }
-        if(i > 99 && i < 125)
-        {
-            if(i > 112)
-            {
-                explosionElement.style.left = `${clickedElement.offsetLeft + leftOffset}px`;
-            }
-            else
-            {
-                explosionElement.style.left = `${clickedElement.offsetLeft - leftOffset}px`;
-            }
-            explosionElement.style.top = `${clickedElement.offsetTop + topOffset}px`;
-            explosionElement.classList.add("explosion-element-u")
-        }
-        if(i > 124 && i < 150)
-        {
-            if(i > 135)
-            {
-                explosionElement.style.left = `${clickedElement.offsetLeft + leftOffset}px`;
-            }
-            else
-            {
-                explosionElement.style.left = `${clickedElement.offsetLeft - leftOffset}px`;
-            }
-            explosionElement.style.top = `${clickedElement.offsetTop - topOffset}px`;
-            explosionElement.classList.add("explosion-element-d")
-        }
-        if(i > 149 && i < 175)
-        {
-            explosionElement.style.left = `${clickedElement.offsetLeft - leftOffset}px`;
-            explosionElement.style.top = `${clickedElement.offsetTop + topOffset}px`;
-            explosionElement.classList.add("explosion-element-r")
-        }
-        if(i > 174)
-        {
-            explosionElement.style.left = `${clickedElement.offsetLeft - leftOffset}px`;
-            explosionElement.style.top = `${clickedElement.offsetTop - topOffset}px`;
-            explosionElement.classList.add("explosion-element-l")
-        }
-        gameContainer.append(explosionElement);
-        setTimeout(() => {
-            explosionElement.remove();
-        }, 200 + Math.random() * 50);
-    }
-
-}
-
-
-function spawnClickResult(clickedElement, type, scoreChange)
-{
-    let gameContainer = document.querySelector(".game-container");
-    let inidcatorElement = document.createElement("div");
-    inidcatorElement.style.left = clickedElement.offsetLeft + 'px';
-    inidcatorElement.style.top = clickedElement.offsetTop + 'px';
-    inidcatorElement.classList.add("slide-out-top");
-    if(type === 'circle')
-    {   
-        inidcatorElement.innerHTML = '+' + scoreChange;
-        inidcatorElement.classList.add("score-indicator-increase");
-    }
-    if(type === 'bonusCircle1')
-    {
-        inidcatorElement.innerHTML = 'Multiplier +1!'
-        inidcatorElement.classList.add("bonus-1-indicator");
-    }
-    if(type === 'bonusCircle2')
-    {
-        inidcatorElement.innerHTML = 'Slow Effect!'
-        inidcatorElement.classList.add("bonus-2-indicator");
-    }
-    if(type === 'trap')
-    {
-        inidcatorElement.innerHTML = '-' + scoreChange;
-        inidcatorElement.classList.add("score-indicator-decrease");
-    }
-    gameContainer.append(inidcatorElement);
-    setTimeout(() => {
-        inidcatorElement.remove();
-    }, 1000);
 }
 
 function spawnTrap()
@@ -415,13 +304,6 @@ function handleTrapClick(element)
     
 }
 
-function decreaseScore(amount)
-{
-    score -= amount;
-    let scoreCounter = document.querySelector(".score");
-    scoreCounter.innerHTML = 'Score: ' + parseInt(score);
-}
-
 function spawnCircle()
 {
     let mainContainer = document.querySelector(".game-container");
@@ -458,14 +340,6 @@ function despawnCircle(element, circleType)
             increaseMissed();
         }
     }
-}
-
-function increaseMissed()
-{
-    streakSize = 0;
-    missed++;
-    let missedCounter = document.querySelector(".missed");
-    missedCounter.innerHTML = "Missed: " + missed;
 }
 
 function spawnBonusCircle()
@@ -599,26 +473,6 @@ function increaseMultiplier()
     }, 10000);
 }
 
-function increaseScore(element)
-{
-    circlesCaptured++;
-    let scoreChange = 1 * multiplier;
-    score = score + scoreChange;
-    let scoreCounter = document.querySelector(".score");
-    scoreCounter.innerHTML = 'Score: ' + parseInt(score);
-    circleCount--;
-    spawnClickResult(element,'circle',scoreChange);
-}
-
-function increaseScoreBonus()
-{
-    score = score + (5 * multiplier);
-    let scoreCounter = document.querySelector(".score");
-    scoreCounter.innerHTML = 'Score: ' + parseInt(score);
-    circleCount--;
-    playSound('bonusPointsSound');
-}
-
 function youLost(interval)
 {
     gameLost = true;
@@ -644,7 +498,6 @@ function youLost(interval)
     }
 
     setTimeout(() => {
-        showHighScores();
         spawnReplayButton();
     },2000);
 
@@ -659,122 +512,3 @@ function spawnReplayButton()
     replayButton.setAttribute("onclick","location.reload()");
     headerElement.append(replayButton);
 }
-
-function showHighScores()
-{
-    let youLostElement = document.querySelector(".you-lost");
-    youLostElement.remove();
-   let result = fetchScores();
-   let resultsMap = parseScores(result);
-   let mainContainer = document.querySelector(".game-container");
-   let highScoresElement = document.createElement("div");
-   highScoresElement.classList.add("high-scores");
-   mainContainer.append(highScoresElement);
-   
-   let header = document.createElement("div");
-   header.classList.add("scores-text");
-   header.classList.add("header-element");
-   header.innerHTML = 'HIGHSCORES:';
-   highScoresElement.append(header);
-
-   let scoresElement = document.createElement("div");
-   scoresElement.classList.add("scores-text");
-   scoresElement.classList.add("scores-element");
-   scoresElement.innerHTML = htmlifyScores(result);
-   highScoresElement.append(scoresElement);
-
-   let nameInput = document.createElement("input");
-   nameInput.classList.add("name-input");
-   nameInput.setAttribute("maxlength","3")
-   nameInput.setAttribute("minlength", "3");
-   highScoresElement.append(nameInput);
-
-   let nameSubmitButton = document.createElement("div");
-   nameSubmitButton.classList.add("name-submit-button");
-   nameSubmitButton.innerHTML = 'Submit';
-   nameSubmitButton.setAttribute("onclick","handleButtonClick()");
-   highScoresElement.append(nameSubmitButton);
-}
-
-function handleButtonClick()
-{
-
-    let button = document.querySelector(".name-submit-button");
-    let input = document.querySelector(".name-input");
-    if(input.value.length === 3)
-    {
-        let result = postScore(input);
-        button.remove();
-        input.remove();
-        updateScores(result);
-    }
-    
-}
-
-function updateScores(result)
-{
-    let scoresElement = document.querySelector(".scores-element");
-    scoresElement.innerHTML = result;
-}
-
-function postScore(input)
-{
-    let scoreObj = {};
-    scoreObj.data = {};
-    scoreObj.data.name = input.value;
-    scoreObj.data.score = score;
-    let result = null;
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("POST", 'https://kajtekimona.pl/scores/', false);
-    xmlhttp.setRequestHeader('Content-type', 'application/json');
-    xmlhttp.send(JSON.stringify(scoreObj));
-    if (xmlhttp.status==200) {
-      result = xmlhttp.responseText;
-    }
-    return result;
-}
-
-function htmlifyScores(scores)
-{
-    let resultArr = scores.split(",");
-    let resultHtml = "";
-    resultArr.forEach((element) =>{
-        resultHtml += element + "<br>";
-    })
-    return resultHtml;
-}
-
-function parseScores(scoresFileOutput)
-{
-    let arraysMap = new Map();
-    let scoresArray = scoresFileOutput.split(",");
-    scoresArray.forEach(element => {
-        let splitElement = element.split("-");
-        if(arraysMap.has(splitElement[0]))
-        {
-            if(arraysMap.get(splitElement[0]) < splitElement[1])
-            {
-                arraysMap.set(splitElement[0], splitElement[1])
-            }
-        }
-        else
-        {
-            arraysMap.set(splitElement[0], splitElement[1]);
-        }
-    })
-    return arraysMap;
-}
-
-function fetchScores()
-{
-    let result = null;
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", '/scores', false);
-    xmlhttp.send();
-    if (xmlhttp.status==200) {
-      result = xmlhttp.responseText;
-    }
-    return result;
-}
-
-
