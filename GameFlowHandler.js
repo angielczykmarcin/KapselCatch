@@ -1,7 +1,7 @@
 export { changeBackground, startGame, startLevel, handleCircleClick, handleBonusCircleClick, getRandomNumberRange, handleTrapClick, slowDownGame, inSlowEffect, handlePlay, moveGameTitle, changeTitleText };
-import { increaseCircleCount, missed, circlesCaptured, increaseStreakSize, increaseScore, increaseMultiplier, decreaseScore, increaseScoreBonus, score, handleStreakBonus} from '/ScoreHandler.js';
-import { spawnCircle, spawnTrap, spawnBonusCircle, spawnClickResult, spawnReplayButton, despawnElementByClassName, removeElement, spawnScore, spawnMultiplier} from '/SpawnHandler.js';
-import { playSound, speedUpBackgroundMusic, pauseSound, playBackgroundMusic } from '/AudioHandler.js';
+import { increaseCircleCount, missed, circlesCaptured, increaseStreakSize, increaseScore, increaseMultiplier, decreaseScore, increaseScoreBonus, score, handleStreakBonus} from './ScoreHandler.js';
+import { spawnCircle, spawnTrap, spawnBonusCircle, spawnClickResult, spawnReplayButton, despawnElementByClassName, removeElement, spawnScore, spawnMultiplier} from './SpawnHandler.js';
+import { playSound, speedUpBackgroundMusic, pauseSound, playBackgroundMusic } from './AudioHandler.js';
 
 let currentLevelSpeed = 750;
 let levelRunning = false;
