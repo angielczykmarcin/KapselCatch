@@ -1,6 +1,6 @@
 export { decreaseScore, increaseScore, increaseScoreBonus, circleCount, score, circlesCaptured, multiplier, increaseCircleCount, increaseMissed, streakSize, missed, increaseStreakSize, increaseMultiplier, handleStreakBonus };
-import { playSound } from '/AudioHandler.js';
-import { spawnClickResult } from '/SpawnHandler.js';
+import { playSound } from './AudioHandler.js';
+import { spawnClickResult } from './SpawnHandler.js';
 
 let score = 0;
 let circlesCaptured = 0;
