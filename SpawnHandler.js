@@ -1,7 +1,7 @@
 export { spawnClickResult, spawnCircle, despawnCircle, spawnTrap, spawnBonusCircle, spawnReplayButton, spawnPlayButton, spawnGameTitle, despawnElementByClassName, removeElement, spawnMultiplier, spawnScore};
-import { handleCircleClick, getRandomNumberRange, handleTrapClick, inSlowEffect, handleBonusCircleClick, handlePlay, moveGameTitle, changeTitleText } from '/GameFlowHandler.js';
-import { increaseMissed } from '/ScoreHandler.js';
-import { playSound } from '/AudioHandler.js';
+import { handleCircleClick, getRandomNumberRange, handleTrapClick, inSlowEffect, handleBonusCircleClick, handlePlay, moveGameTitle, changeTitleText } from './GameFlowHandler.js';
+import { increaseMissed } from './ScoreHandler.js';
+import { playSound } from './AudioHandler.js';
 
 function spawnGameTitle()
 {
