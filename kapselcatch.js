@@ -1,4 +1,4 @@
-import {spawnPlayButton, spawnGameTitle} from '/SpawnHandler.js';
+import {spawnPlayButton, spawnGameTitle} from './SpawnHandler.js';
 
 window.onload = () => {
     let bodyElement = document.querySelector("body");
